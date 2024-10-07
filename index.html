@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falcon Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+        .dashboard {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background-color: #ecf0f1;
+            overflow-y: auto;
+        }
+        .dashboard-header {
+            background-color:  #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .logo img {
+            height: 60px;
+            margin-right: 10px;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px;
+        }
+        .team-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .team-box:hover {
+            transform: translateY(-5px);
+        }
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .team-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        .task-stats {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .bi {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .bi-check-circle-fill {
+            color: #2ecc71;
+        }
+        .bi-circle {
+            color: #e74c3c;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #welcomeMessage {
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .task-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ecf0f1;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .task-list li:hover {
+            background-color: #f7f9fa;
+        }
+        .bi {
+            margin-right: 10px;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <div class="logo">
+                    <img src="C:\Users\divij\OneDrive\Desktop\Falcon.jpg" alt="Falcon Logo">
+                    FALCON INDUSTRIES
+                </div>
+                <h2 id="welcomeMessage"></h2>
+                <button onclick="logout()">Logout</button>
+            </div>
+            <div class="team-grid" id="teamGrid"></div>
+        </div>
+    </div>
+    <script>
+        const teams = [
+            {
+                name: "Frontend Team",
+                members: ["Akshit S.", "Daksh", "Garima", "Akshit V."],
+                tasks: [
+                    { id: 1, description: "Design login page", completion: true },
+                    { id: 2, description: "Implement sign-up functionality", completion: false },
+                    { id: 3, description: "Create dashboard layout", completion: true },
+                    { id: 4, description: "Optimize for mobile devices", completion: false },
+                    { id: 5, description: "Implement user profile page", completion: false },
+                    { id: 6, description: "Add form validation", completion: true },
+                    { id: 7, description: "Create navigation menu", completion: true },
+                    { id: 8, description: "Implement dark mode", completion: false }
+                ]
+            },
+            {
+                name: "Backend Team",
+                members: ["Aditya", "Ridhima", "Gunn", "Gauri"],
+                tasks: [
+                    { id: 9, description: "Set up database schema", completion: true },
+                    { id: 10, description: "Implement user authentication", completion: true },
+                    { id: 11, description: "Create API endpoints", completion: false },
+                    { id: 12, description: "Optimize database queries", completion: false },
+                    { id: 13, description: "Implement password reset functionality", completion: true },
+                    { id: 14, description: "Set up email notifications", completion: false },
+                    { id: 15, description: "Implement data caching", completion: false },
+                    { id: 16, description: "Create admin dashboard backend", completion: true }
+                ]
+            },
+            {
+                name: "Cybersecurity Team",
+                members: ["Hammad", "Divij", "Dipanshu", "Anirudh"],
+                tasks: [
+                    { id: 17, description: "Test login functionality", completion: true },
+                    { id: 18, description: "Perform security testing", completion: false },
+                    { id: 19, description: "Create test cases for new features", completion: true },
+                    { id: 20, description: "Conduct performance testing", completion: false },
+                    { id: 21, description: "Test mobile responsiveness", completion: true },
+                    { id: 22, description: "Verify API responses", completion: true },
+                    { id: 23, description: "Conduct user acceptance testing", completion: false },
+                    { id: 24, description: "Test cross-browser compatibility", completion: false }
+                ]
+            },
+            {
+                name: "DevOps Team",
+                members: ["Mike Tyson", "Muhammad Ali", "Andrew Tate", "Khali"],
+                tasks: [
+                    { id: 25, description: "Set up CI/CD pipeline", completion: true },
+                    { id: 26, description: "Configure production servers", completion: true },
+                    { id: 27, description: "Implement automated backups", completion: false },
+                    { id: 28, description: "Set up monitoring and alerting", completion: true },
+                    { id: 29, description: "Optimize server performance", completion: false },
+                    { id: 30, description: "Implement containerization", completion: true },
+                    { id: 31, description: "Set up load balancing", completion: false },
+                    { id: 32, description: "Conduct security audits", completion: false }
+                ]
+            }
+        ];
+
+        let currentUser = null;
+
+        function promptLogin() {
+            const username = prompt("Enter your username:");
+            const password = prompt("Enter your password:");
+            const designation = prompt("Enter your designation Admin or Employee):");
+
+            if (username && password && designation === 'Admin') {
+                currentUser = { username, designation };
+                document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('welcomeMessage').textContent = "Welcome to Admin Dashboard";
+                renderDashboard();
+            }
+            else if (username && password && designation === 'Employee') {
+                currentUser = { username, designation };
+                document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('welcomeMessage').textContent = "Welcome to Admin Dashboard";
+                renderDashboard();
+            } else {
+                alert("Invalid input. Please try again.");
+                promptLogin();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('dashboard').style.display = 'none';
+            promptLogin();
+        }
+
+        function toggleTaskCompletion(taskId) {
+            for (let team of teams) {
+                const task = team.tasks.find(t => t.id === taskId);
+                if (task) {
+                    task.completion = !task.completion;
+                    renderDashboard();
+                    break;
+                }
+            }
+        }
+
+        function renderDashboard() {
+            const teamGrid = document.getElementById('teamGrid');
+            teamGrid.innerHTML = '';
+
+            teams.forEach(team => {
+                const teamBox = document.createElement('div');
+                teamBox.className = 'team-box';
+
+                const completedTasks = team.tasks.filter(task => task.completion).length;
+                const totalTasks = team.tasks.length;
+
+                teamBox.innerHTML = `
+                    <div class="team-header">
+                        <h3>${team.name}</h3>
+                        <div class="task-stats">
+                            ${completedTasks}/${totalTasks} tasks completed
+                        </div>
+                    </div>
+                    <p>Members: ${team.members.join(', ')}</p>
+                    <h4>Tasks:</h4>
+                    <ul class="task-list">
+                        ${team.tasks.map(task => `
+                            <li onclick="toggleTaskCompletion(${task.id})">
+                                <i class="bi ${task.completion ? 'bi-check-circle-fill' : 'bi-circle'}"></i>
+                                ${task.description}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+
+                teamGrid.appendChild(teamBox);
+            });
+        }
+
+        promptLogin();
+    </script>
+</body>
+</html>
